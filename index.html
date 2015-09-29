@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Multipurpose Website UI Theme</title>
+    <!--BOOTSTRAP CSS-->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="theme/jquery-ui/jquery-ui.css">
+    <!--link rel="stylesheet" href="theme/image_tandoor.css"-->
+    <!--THEME CSS-->
+    <link rel="stylesheet" href="theme/theme.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Modal -->
+    <div class="modal fade rise-modal" id="spread-word" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <div class="modal-body">
+                    <div class="modal-content-wrapper">
+                        <!-- <a href="#" class="help-icon"><i class="fa fa-question-circle fa-2"></i></a> -->
+                        <div id="modal-tab-content">
+                            <!--DESKTOP TAB START-->
+                            <div class="row tab-content show" id="desktop-tab">
+                                <div class="col-lg-12 ">
+                                    <div class="mt-50 mb-50 text-center">
+                                        <p><img src="images/upload-page-icon.png" alt="Upload Image" width="130" height="131"></p>
+                                        <!--h1 class="text-orange mt-30 large">DRAG &amp; DROP <span class="light text-blue">A PICTURE</span></h1>
+							<p>OR</p-->
+                                        <h1 class="text-orange mt-30 large text-uppercase">UPLOAD <span class="light text-blue">A FILE</span></h1>
+                                        <p class="text-uppercase large mb-0">UPLOAD PHOTO FROM YOUR MACHINE</p>
+                                        <a href="#" class="btn btn-primary" id="browse">BROWSE PHOTOS</a>
+                                        <div class="input-container"><input type="file" id="image-loader-desktop" name="image-loader-desktop" /></div>
+                                        <p class="small mt-10">Click browse photos to chose a file from your machine</p>
+                                        <!--img src="images/upload-a-photo.png" class="upload-a-photo" alt="Upload a Photo" width="151" height="81">
+							<img src="images/choose-additional.png" class="choose-additional" alt="Choose Additional Options" width="167" height="98"-->
+                                    </div>
+                                </div>
+                            </div>
+                            <!--DESKTOP TAB END-->
+                            <!--CAMERA TAB START-->
+                            <div class="row tab-content  hide" id="camera-tab">
+                                <div class="col-lg-12 ">
+                                    <div class="mt-50 mb-50 text-center">
+                                        <i class="fa fa-camera fa-7x text-light-gray"></i>
+                                        <h1 class="text-orange mt-30 large">PLEASE ALLOW ACCESS <br><span class="light text-blue">TO YOUR CAMERA</span></h1>
+                                        <a href="#" id="camera-snap" class="btn btn-primary take-photo" id="request-permission">REQUEST PERMISSION</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--CAMERA TAB END-->
+                            <!--TAKE PHOTO WITH CAMERA START-->
+                            <div class="row tab-content  hide" id="take-photo">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <div class="mt-10 mb-10 text-center">
+                                        <div class="gray-place-holder">
+                                            <video id="photo-take-video">Video stream not available.</video>
+                                            <canvas id="photo-take-canvas"></canvas>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-6" id="camera-btn-left">
+                                                <!-- <button id="camera-mirror" class="btn btn-primary  btn-block">MIRROR</button> -->
+                                                <button id="camera-retake" class="btn btn-primary ">RETAKE</button>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-6" id="camera-btn-right">
+                                                <button class="btn  btn-warning  " id="take-photo-btn">TAKE A PHOTO</button>
+                                                <button class="btn  btn-warning  " id="edit-taken-photo-btn">USE THIS PICTURE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--TAKE PHOTO WITH CAMERA END-->
+                            <!--IMAGE CROP START-->
+                            <div class="row tab-content  hide" id="image-crop">
+                                <div class="col-lg-12">
+                                    <div class="text-center">
+                                        <div class="row">
+                                            <div class="col-md-12" id="canvas-holder">
+                                                <div class="canvas-holder">
+                                                    <canvas id="imageCanvas"></canvas>
+                                                </div>
+                                                <div class="row hide mt-10" id="sec-btns-holder">
+                                                    <div class="col-md-4 mb-10">
+                                                        <a id="edit-image-preview" href="#" class="btn btn-primary btn-block ">EDIT</a>
+                                                    </div>
+                                                    <div class="col-md-4  mb-10">
+                                                        <a id="download-image-preview" class="btn btn-warning btn-block ">DOWNLOAD</a>
+                                                    </div>
+                                                    <div class="col-md-4  mb-10">
+                                                         <a id="email-image-preview" href="#" class="btn btn-primary  btn-block btn-bordered">EMAIL ME A COPY</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-5 col-md-4 hide" id="tools-holder">
+                                                <!--button class="btn btn-primary btn-bordered btn-block mb-10 mt-20">VIEW ORIGINAL IMAGE</button>
+									<button class="btn  btn-warning  btn-bordered btn-block mb-10">PREVIEW</button-->
+                                                <!--div class="btn-group-small text-left" id="tools">
+                                                </div>
+                                                <div id="subtool" class="text-left">
+                                                </div-->
+                                                <!-- New Elements Starts-->
+                                          
+                                                <!-- Adjust -->
+                                                <div class="text-left hide" id="adjust-color">
+                                                    <div id="pre-select" class="hide">
+                                                    <h3>Select Two Color To Keep</h3>
+                                                    <p>Click on photo and select two colors you want to keep.</p>
+                                                    </div>
+                                                    
+                                                    <div id="post-select" class="hide">
+                                                    <h3>Adjust Selected Colors</h3>
+                                                    <p>Slide the bar <stong>Left</stong> or <stong>Right</stong> to adjust the color</p>
+                                                    <p class="small">Note: You will be able to clean up the image by adding color to specific areas or removing color later. We suggest getting it as close as you can now but not worring if its perfect.</p>
+                                                    </div>
+                                                    <div class="subtool-holder">
+                                                        <div class="subtool-block">
+                                                            <div class="subtool-group">
+                                                                <div class="add-cp-button cp-button-1">
+                                                                    <div id="cp-1">&nbsp;</div>
+                                                                </div>
+                                                                <div id='cp-1-slider-holder' class="slider-holder tool-slider"><div id="cp-1-slider" class="color-slider tool-slider"></div></div>
+                                                                <a href="#" id='cp-1-del' class="remove-color-link text-danger"><i class="fa fa-minus-circle"></i></a>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="subtool-block">
+                                                            <div class="subtool-group">
+                                                                <div class="add-cp-button cp-button-2">
+                                                                    <div id="cp-2">&nbsp;</div>
+                                                                </div>
+                                                                <div id='cp-2-slider-holder' class="slider-holder tool-slider"><div id="cp-2-slider" class="color-slider tool-slider"></div></div>
+                                                                <a  id='cp-2-del' href="#" class="remove-color-link  text-danger"><i class="fa fa-minus-circle"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-left hide" id="touch-brush">
+                                                    <h3>Touch Up Your Photo</h3>
+                                                    <p>Use Either The Add Color or Remove Color Brush</p>
+                                                    <ul class="icon-list list-unstyled">
+                                                        <li class="saturated"><span class="icon"></span><span>The remove color brush will make areas black and white</span></li>
+                                                        <li class="desaturated"><span class="icon"></span><span>The add color brush will make selected areas the original color of the uploaded photo.</span></li>
+                                                    </ul>
+                                                    <p class="small">Note:  You can change the size of the brush using the slider.</p>
+                                                    <div class="subtool-holder btn-group-small">
+                                                        <label>Select A Brush:</label>
+                                                        <div class="add_table_data_botton_class btn btn-primary btn-bordered  btn_desat" id="desat-btn"></div>
+                                                        <div class="add_table_data_botton_class btn btn-primary btn-bordered btn_sat" id="sat-btn"></div>
+                                                        <div class="slider-holder" id="slider-holder"></div>
+                                                    </div>
+                                                    <!--div class="subtool-holder btn-group-small">
+                                                        <label>Undo &amp; Redo:</label>
+                                                        <div class="add_table_data_botton_class btn btn-primary btn-bordered btn_undo" id="undo-btn"></div>
+                                                        <div class="add_table_data_botton_class btn btn-primary btn-bordered btn_redo" id="redo-btn"></div>
+                                                    </div-->
+                                                </div>
+                                                <!-- Email Send Words -->
+                                                <div class="text-left hide" id="post-send">
+                                                    <div class="text-left">
+                                                        <div class="alert alert-success mt-10" role="alert">Your Email Has Been Sent</div>
+                                                        <!-- <h3>Spread The Word</h3>
+                                                        <p>Please allow access to your cameraPlease allow access to your cameraPlease allow access</p>
+                                                        <div class="social-btns-holder"><a href="#" class="btn btn-twitter"><i class="fa fa-twitter"></i> Share on Twitter</a><a href="#" class="btn btn-instagram"><i class="fa fa-instagram"></i> Share on Instagram</a><a href="#" class="btn btn-flickr"><i class="fa fa-flickr"></i> Share on Flicker</a><a href="#" class="btn btn-facebook"><i class="fa fa-facebook-square"></i> Share on Facebook</a></div> -->
+                                                    </div>
+                                                </div>
+                                                <!-- Spreed Words -->
+                                                <div class="text-left hide" id="share-word">
+                                                    <h3>Spread The Word</h3>
+                                                    <p>Share your photo and help spread the word.</p>
+                                                    <div class="social-btns-holder"><a href="#" class="btn btn-twitter"><i class="fa fa-twitter"></i> Share on Twitter</a><a href="#" class="btn btn-instagram" id="btn-instagram"><i class="fa fa-instagram"></i> Share on Instagram</a><!--a href="#" class="btn btn-flickr"><i class="fa fa-flickr"></i> Share on Flicker</a--><a href="#" class="btn btn-facebook"><i class="fa fa-facebook-square"></i> Share on Facebook</a></div>
+                                                </div>
+                                                <!-- Email  Words -->
+                                                <div class="text-left hide" id="send-email">
+                                                    <h3>Email</h3>
+                                                    <p class="small">Enter Your Rmail Address</p>
+                                                    <form action="" class="mb-20">
+                                                        <input type="text" name="
+										email" class="form-control" id="email-input">
+                                                        <input id="send-email-preview" value="Email Me A Copy" class="btn btn-primary text-uppercase mt-10">
+                                                    </form>
+                                                    <p class="small">Note: If you don’t see the email please remember to check your junk or spam folder. Some Email services may send our emails there.</p>
+                                                </div>
+
+
+
+                                                <!-- New Elements End -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--IMAGE CROP END-->
+                            <!--IMAGE EDIT START-->
+                            <div class="row tab-content  hide" id="color">
+                                <div class="col-lg-8">
+                                    <div class="color-selector">
+                                        <label>Select Colors To Keep</label>
+                                        <div class="color-sq-box"></div>
+                                        <div class="color-slider text-center"><img src="images/slider-img.png"></div>
+                                        <div class="btn-group-inline">
+                                            <button class="btn btn-default"><i class="fa fa-plus"></i></button>
+                                            <button class="btn btn-default"><i class="fa fa-minus"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="preview-block"></div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <button class="btn btn-primary btn-bordered btn-block mb-10 mt-50">VIEW ORIGINAL IMAGE</button>
+                                    <button class="btn  btn-warning  btn-bordered btn-block mb-10">REVIEW</button>
+                                    <div class="btn-group-small">
+                                        <button class="btn btn-primary btn-bordered paintbrush active"><i class="fa fa-paint-brush"></i></button>
+                                        <button class="btn btn-primary btn-bordered paintbrush2"><i class="fa fa-paint-brush"></i></button>
+                                        <button class="btn btn-primary btn-bordered zoom"><i class="fa fa-search-plus"></i></button>
+                                        <button class="btn btn-primary btn-bordered undo"><i class="fa fa-undo"></i></button>
+                                        <button class="btn btn-primary btn-bordered redo"><i class="fa fa-repeat"></i></button>
+                                    </div>
+                                    <div class="option-block">
+                                        <div id="paintbrush" class="options show text-center"><img src="images/slider-img.png"></div>
+                                        <div id="paintbrush2" class="options hide text-center">Some options</div>
+                                        <div id="zoom" class="options hide text-center">zoom options</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--IMAGE EDIT END-->
+                            <!--IMAGE SHARE START-->
+                            <div class="row tab-content  hide" id="share">
+                                <div class="col-lg-8">
+                                    <form>
+                                        <div class="form-group">
+                                            <textarea name="" id="" cols="30" rows="15" class="form-control"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <button class="btn btn-primary btn-bordered btn-block">EDIT</button>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <button class="btn  btn-warning  btn-bordered btn-block">DOWNLOAD</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-4">
+                                    <h1 class="text-orange mt-30">SPREAD THE <span class="light text-blue">WORD</span></h1>
+                                    <p class="text-center">Please allow access to your cameraPlease allow access to your cameraPlease allow access</p>
+                                    <div class="social-btns-holder">
+                                        <a href="#" class="btn btn-twitter"><i class="fa fa-twitter"></i> Share on Twitter</a>
+                                        <a href="#" class="btn btn-instagram"><i class="fa fa-instagram"></i> Share on Instagram</a>
+                                        <a href="#" class="btn btn-flickr"><i class="fa fa-flickr"></i> Share on Flicker</a>
+                                        <a href="#" class="btn btn-facebook"><i class="fa fa-facebook-square"></i> Share on Facebook</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--IMAGE SHARE END-->
+                            <!--FACEBOOK TAB START-->
+                            <div class="row tab-content  hide" id="facebook-tab">
+                                <div class="col-lg-12 ">
+                                    <div class="mt-30 mb-50 text-center">
+                                        <h1 class="text-orange large mb-20">UPLOAD A FILE FROM <span class="light text-facebook">FACEBOOK</span></h1>
+                                        <i class="fa fa-facebook-square fa-7x text-facebook"></i>
+                                        <p class="large text-facebook mt-20 mb-20">Get images from your Facebbok albums.
+                                            <br>Don't worry we play nice..</p>
+                                        <a href="#" class="btn btn-facebook">CONNECT TO FACEBOOK</a>
+                                        <p class="small mt-10">We will open a new page to connect to your Facebook account.
+                                            <br>You will need to authorize access to your photos.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--FACEBOOK TAB END-->
+                            <!--INSTAGRAM TAB START-->
+                            <div class="row tab-content  hide" id="instagram-tab">
+                                <div class="col-lg-12" id="instagram-upload">
+                                    <div class="mt-30 mb-50 text-center">
+                                        <h1 class="text-orange large mb-20">UPLOAD A FILE FROM <span class="light text-blue">INSTAGRAM</span></h1>
+                                        <i class="fa fa-instagram fa-7x text-instagram"></i>
+                                        <p class="large text-instagram mt-20 mb-20">Get images from your Instagram albums.
+                                            <br>Don't worry we play nice.</p>
+                                        <a href="#" class="btn btn-instagram" id="connect-instagram">CONNECT TO INSTAGRAM</a>
+                                        <p class="small mt-10">We will open a new page to connect to your Instagram account.
+                                            <br>You will need to authorize access to your photos.</p>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-12 hide" id="instagram-share">
+                                    <div class="mt-30  text-center">
+                                        <h1 class="text-orange large mb-20">INSTAGRAM SHARING <span class="light text-blue">WORKS DIFFERENTLY</span></h1>
+
+                                        <div class="row">
+                                            <div class="col-sm-5 mt-20 text-center"> 
+                                               <img src="images/instagram-download-img.png" alt="Download Image" width="230" height="200">
+                                               <p class="mt-10">Download Your Photo</p>
+                                               <p><a id="download-image-preview" class="btn btn-instagram btn-block ">DOWNLOAD</a></p>
+                                            </div>
+                                            <div class="col-sm-2 mt-20 text-center">
+                                                <img src="images/instagram-arrow.png" class="insta-arrow" alt="Share arrow" width="36" height="36">
+                                            </div>
+                                            <div class="col-sm-5 mt-20 text-center">
+                                                <img src="images/instagram-app-img.png" alt="Share" width="112" height="200">
+                                                <p class="mt-10">Open Your Instagram App and Complete Publishing using your Instagram App</p>
+                                            </div>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <!--INSTAGRAM TAB END-->
+
+
+
+                            <!--FLICKR TAB START-->
+                            <!--div class="row tab-content  hide" id="flickr-tab">
+						<div class="col-lg-12 ">
+						<div class="mt-30 mb-50 text-center">
+							<h1 class="text-orange large mb-20">UPLOAD A FILE FROM <span class="light text-blue">FLICKR</span></h1>
+							<i class="fa fa-flickr fa-7x text-flickr"></i>
+							<p class="large text-flickr mt-20 mb-20">Get images from your Flickr albums. <br>Don't worry we play nice.</p>
+							<a href="#" class="btn btn-flickr">CONNECT TO FLICKR</a>
+							<p class="small mt-10">We will open a new page to connect to your Flickr account <br>you will need to authrize access to your photos</p>
+						</div>
+					</div>
+				</div-->
+                            <!--FLICKR TAB END-->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="tab-btn-wrapper text-center show" id="tab-btn-wrapper">
+                        <ul class="list-inline text-center tab-btn-list">
+                            <li class="desktop-tab active"><i class="fa fa-desktop"></i></li>
+                            <li class="camera-tab "><i class="fa fa-camera"></i></li>
+                            <li class="facebook-tab"><i class="fa fa-facebook-square"></i></li>
+                            <li class="instagram-tab"><i class="fa fa-instagram"></i></li>
+                            <!--li class="flickr-tab"><i class="fa fa-flickr"></i></li-->
+                        </ul>
+                    </div>
+                    <div class="btn-wrapper hide" id="link-btn">
+                        <a href="index.html" class="btn btn-link btn-link-warning">go back to image upload</a>
+                        <a href="#" class="btn btn-primary" id="continue">CONTINUE</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/modal.js"></script>
+    <script type="text/javascript" src="bootstrap/js/tab.js"></script>
+    <script type="text/javascript" src="theme/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/image_tandoor.js"></script>
+    <script type="text/javascript">
+ 
+    // Initialize
+    imageTandoor.init();
+
+
+    navigator.getMedia = (navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia);
+
+    var currentWindow = "take-photo",
+            cameraWidth = 320, // **** camera width
+            cameraHeight,
+            localMediaStream,
+            emailURL = 'helper_php/email.php',
+            canvasElem = document.getElementById('imageCanvas');
+
+
+    function loadCamera() {
+        var video = document.getElementById('photo-take-video'),
+            jqVideo = $(video).attr({
+                width: '100%'
+            }),
+            jqCanvas = $('#photo-take-canvas');
+        $("#camera-tab").addClass('hide').removeClass('show');
+        $("#take-photo").removeClass('hide');
+        $('#edit-taken-photo-btn').hide();
+        $('#take-photo-btn').show();
+        $('#camera-mirror').show();
+        $('#camera-retake').hide();
+        $('#camera-btn-left').hide();
+        $('#camera-btn-right').addClass('col-sm-offset-3');
+       
+        jqCanvas.hide();
+        jqVideo.show();
+
+
+
+        navigator.getMedia({
+                video: true,
+                audio: false
+            },
+            function(stream) {
+                localMediaStream = stream;
+                if (navigator.mozGetUserMedia) {
+                    video.mozSrcObject = stream;
+                } else {
+                    var vendorURL = window.URL || window.webkitURL;
+                    video.src = vendorURL.createObjectURL(stream);
+                }
+                video.play();
+            },
+            function(err) {
+                console.log("An error occured! " + err);
+            }
+        );
+
+
+    }
+
+
+    function takeImage() {
+        var video = document.getElementById('photo-take-video'),
+            jqVideo = $(video),
+            canvasElem = document.getElementById('photo-take-canvas'),
+            context = canvasElem.getContext('2d'),
+            jqCanvas = $(canvasElem).show();;
+            cameraWidth = jqVideo.width();
+        cameraHeight = video.videoHeight / (video.videoWidth / cameraWidth);
+
+        if (isNaN(cameraHeight)) {
+            cameraHeight = cameraWidth / (4 / 3);
+        }
+        jqCanvas.attr({
+            width: cameraWidth,
+            height: cameraHeight
+        })
+
+        context.drawImage(video, 0, 0, cameraWidth, cameraHeight)
+        video.pause();
+        localMediaStream && localMediaStream.stop && localMediaStream.stop();
+
+        $('#edit-taken-photo-btn').show();
+        $('#take-photo-btn').hide();
+        $('#camera-mirror').hide();
+        $('#camera-retake').show();
+        $('#camera-btn-left').show();
+        $('#camera-btn-right').removeClass('col-sm-offset-3');
+        jqCanvas.show();
+        jqVideo.hide();
+
+    }
+
+    function applymirror() {
+
+    }
+
+    // This function is just to show Instagram post share page
+    function instagramShare() {
+        hideAll();
+        $("#image-crop").removeClass("show").addClass("hide");
+        $("#instagram-tab").addClass("show");
+        $("#instagram-upload").addClass("hide");
+        $("#instagram-share").removeClass("hide");
+        $("#tab-btn-wrapper").removeClass("show").addClass("hide");
+        $("#link-btn").removeClass("hide").html("<a href='#' class='btn btn-link btn-link-warning'>go back to sharing options</a><a href='#' class='btn btn-primary' id='done-sharing'>DONE SHARING</a>");
+    }
+
+   
+
+
+    function hideAll() {
+
+        $('#adjust-color').addClass('hide');
+        $('#touch-brush').addClass('hide');
+        $('#share-word').addClass('hide');
+        $('#sec-btns-holder').addClass('hide');
+        $('#send-email').addClass('hide');
+        $('#post-send').addClass('hide');
+        $('#pre-select').addClass('hide');
+        $('#post-select').addClass('hide');
+        $("#canvas-holder").removeClass('thumbnail-view');
+
+    }
+
+
+    function showCropOption() {
+        hideAll();
+        $("#image-crop").siblings().removeClass("show").addClass("hide");
+        $("#image-crop").removeClass("hide").addClass("show");
+        $("#tab-btn-wrapper").removeClass("show").addClass("hide");
+        $("#link-btn").addClass("show");
+        $("#canvas-holder").addClass("col-sm-12");
+        currentWindow = "image-crop";
+    }
+
+    function activeColorPicker() {
+        hideAll();
+        $('#adjust-color').removeClass("hide").removeClass("active-adjust");;;
+        $("#tools-holder").removeClass("hide");
+        $("#canvas-holder").addClass("col-sm-7 col-md-8").removeClass("col-md-12");
+        $("#pre-select").removeClass("hide");
+        $("#cp-1-slider-holder").addClass("hide");
+        $("#cp-2-slider-holder").addClass("hide");
+        $("#slider-holder").removeClass("active-slider");
+        currentWindow = "color-picker";
+        imageTandoor.activateColourPicker();
+        checkModalSize();
+    }
+
+  function activeColorPicker2() {
+        hideAll();
+        $('#adjust-color').removeClass("hide").addClass("active-adjust");;
+        $("#tools-holder").removeClass("hide");
+        $("#canvas-holder").addClass("col-sm-7 col-md-8").removeClass("col-md-12");
+        $("#pre-select").addClass("hide");
+        $("#post-select").removeClass("hide");
+        $("#cp-1-slider-holder").removeClass("hide");
+        $("#cp-2-slider-holder").removeClass("hide");
+        currentWindow = "color-picker2";
+        imageTandoor.activateColourPicker();
+  }
+
+    function activeTouchUp() {
+        hideAll();
+        currentWindow = "touch-up";
+        $('#touch-brush').removeClass("hide");
+        $('#pre-select').removeClass("hide");
+        imageTandoor.activateBrush();
+    }
+
+ 
+    function preview() {
+        hideAll();
+        $('#share-word').removeClass("hide");
+        $('#sec-btns-holder').removeClass("hide");
+        currentWindow = "preview";
+        imageTandoor.preview();
+        $("#continue").hide();
+                $("#canvas-holder").addClass("thumbnail-view");
+    }
+
+    function email() {
+        $('#send-email').removeClass("hide");
+        $('#share-word').addClass("hide");
+        $('#post-send').addClass('hide');
+    }
+
+    function sendEmail() {
+        var emailAddress = $('#email-input').val(),
+        validEmail = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/ig.test(emailAddress);
+
+        if (validEmail) {
+            // send the email data as ajax and put the dummy sucess text
+            $.ajax({
+              method: "POST",
+              url: emailURL,
+              data: { email: emailAddress, imageData: canvasElem.toDataURL() }
+            })
+              .done(function( msg ) {// for betterment show the done messege here
+                
+              });
+
+            $('#send-email').addClass("hide");
+            $('#post-send').removeClass('hide');
+            $('#share-word').removeClass('hide');
+            $('#email-input').removeClass('error-email');
+        }
+        else {
+            $('#email-input').addClass('error-email');
+        }
+    }
+
+
+
+    function showAdvanceEditOption() {
+        //$("#color").siblings().removeClass("show").addClass("hide");
+        //$("#color").addClass("show");
+        //$("#tab-btn-wrapper").removeClass("show").addClass("hide");
+        //$("#link-btn").addClass("show");
+        imageTandoor.deActivateTool();
+        $("#tools-holder").removeClass("hide");
+        $("#canvas-holder").addClass("col-sm-7 col-md-8").removeClass("col-md-12");
+        currentWindow = "color";
+
+
+    }
+
+
+    function showShareOption() {
+        //helper.deActivateTool();
+        // $("#share").siblings().removeClass("show").addClass("hide");
+        // $("#share").addClass("show");
+        // $("#tab-btn-wrapper").removeClass("show").addClass("hide");
+        // $("#link-btn").addClass("show");
+        $("#canvas-holder").append(extraBtns);
+        $("#tools-holder").html(shareBtns);
+        $("#continue").remove();
+    }
+
+
+
+     function resizeImageCanv (width, height) {
+        var canvasSize = imageTandoor.getSize(),
+        newSize = imageTandoor.calcSize(canvasSize.w, canvasSize.h, width, height)
+        
+        imageTandoor.resize(newSize[0], newSize[1]);
+    }
+
+
+    function checkModalSize() {
+        var modalWidth = $('#spread-word .modal-content-wrapper').width();
+        var modalHeight = $('#spread-word .modal-content-wrapper').height();
+        resizeImageCanv(modalWidth, modalHeight);
+    }
+
+
+
+
+
+   $(document).ready(function() {
+    	// add file browse events
+        // set the local image handler
+        $('#image-loader-desktop').on('change', function(e) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+            	showCropOption();
+                imageTandoor.loadImage(event.target.result);
+
+                //setTimeout(checkModalSize, 10);
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
+        
+
+        //email-image-preview
+
+        $('#email-image-preview').on('click', email);
+        $('#send-email-preview').on('click', sendEmail);
+        $('#edit-image-preview').on('click', function () {
+        	activeColorPicker();
+        	$("#continue").show();
+        });
+        $('#download-image-preview').on('click', function() {
+            imageTandoor.downLoad(this.id)
+        });
+
+        $("#continue").on("click", function() {
+            /*var getSection = $("#modal-tab-content .show").attr("id");
+            console.log(getSection);*/
+            
+            switch (currentWindow) {
+                case "take-photo":
+                    showCropOption();
+                    break;
+                case "image-crop":
+                    activeColorPicker();
+                    break;
+                case "color-picker":
+                    activeColorPicker2();
+                    break;
+                case "color-picker2":
+                    activeTouchUp();
+                    break;
+                case "touch-up":
+                    preview();
+                    break;
+                case "preview":
+                    //preview();
+                    break;                 
+            }
+        });
+
+
+
+
+        /// Camera upload feature
+        $('#camera-snap').on('click', loadCamera);
+        $('#take-photo-btn').on('click', takeImage);
+        $('#edit-taken-photo-btn').on('click', function() {
+            var canvasElem = document.getElementById('photo-take-canvas'),
+                context = canvasElem.getContext('2d');
+
+            showCropOption();
+            imageTandoor.loadImage(context.getImageData(0, 0, cameraWidth, cameraHeight), 'imagedata');
+        });
+        $('#camera-mirror').on('click', applymirror);
+        $('#camera-retake').on('click', loadCamera);
+
+
+
+
+
+
+        $('#tab-btn-wrapper li').click(function(e) {
+            e.preventDefault();
+            if ($(this).hasClass("active")) {
+                //console.log("hi");
+            } else {
+                var clickedTab = $(this).attr("class");
+                $("#modal-tab-content").find(".tab-content").removeClass("show").addClass("hide");
+                $("#modal-tab-content").find("#" + clickedTab).addClass("show");
+                $(this).siblings().removeClass("active");
+                $(this).addClass("active");
+            }
+        });
+
+        $("#request-permission").on("click", function() {
+            $("#take-photo").siblings().removeClass("show").addClass("hide");
+            $("#take-photo").addClass("show");
+            $("#tab-btn-wrapper").removeClass("show").addClass("hide");
+            $("#link-btn").addClass("show");
+        });
+
+
+        // function temp () {
+        //     showCropOption();
+        //     // @temp
+        //     imageTandoor.loadImage('images/test-images/chear.jpg', 'url');
+        //     $(window).off("click", temp);
+        // }
+        // $(window).on("click", temp);
+
+
+        $("#connect-instagram").on("click", function() {
+            hideAll();
+            instagramShare();
+        });
+
+        $("#btn-instagram").on("click", function() {
+            hideAll();
+            instagramShare();
+        });
+       
+
+
+
+        $(".paintbrush").on("click", function() {
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
+            $("#paintbrush").removeClass("hide").addClass("show");
+            $("#paintbrush").siblings().removeClass("show").addClass("hide");
+        });
+
+        $(".paintbrush2").on("click", function() {
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
+            $("#paintbrush2").removeClass("hide").addClass("show");
+            $("#paintbrush2").siblings().removeClass("show").addClass("hide");
+        });
+
+        $(".zoom").on("click", function() {
+            $(this).siblings().removeClass("active");
+            $(this).addClass("active");
+            $("#zoom").removeClass("hide").addClass("show");
+            $("#zoom").siblings().removeClass("show").addClass("hide");
+        });
+
+
+        // Check Active
+
+        $(".add_table_data_botton_class").on("click", function() {
+            $("#slider-holder").addClass("active-slider");
+        })
+
+
+
+        // Browser button
+
+        $('#browse').click(function(){
+            $('#image-loader-desktop').click();
+        });
+
+       $(window).load(function() {
+            $('#spread-word').modal('show');
+            checkModalSize();
+        });
+
+       $(window).resize(function(){
+            checkModalSize();
+       });
+
+
+    });
+    </script>
+
+</body>
+
+</html>

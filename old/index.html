@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/image_tandoor.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <div class="palette-block">
+            <div class="upload-image">
+                <label>Image File:</label>
+                <input type="file" id="imageLoader" name="imageLoader" />
+                <div id="subtool"></div>
+            </div>
+            <div class="left">
+            </div>
+            <div class="canvas-holder right">
+                <canvas id="imageCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/image_tandoor.js"></script>
+    <script type="text/javascript">
+    "use strict";
+
+
+
+
+    // Initialize
+    helper.init($('#imageLoader'));
+
+    helper.loadImage('images/test_images/chear.jpg')
+    </script>
+</body>
+
+</html>

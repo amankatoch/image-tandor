@@ -1,0 +1,10 @@
+/* PAGE STYLE */
+.rise-modal .modal-dialog {
+  width: 832px;
+}
+.rise-modal .modal-content {
+  border-radius: 0;
+}
+.rise-modal .modal-footer {
+  background-color: #efefef;
+}

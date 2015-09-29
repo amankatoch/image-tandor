@@ -1,0 +1,19 @@
+btnTextConf = {
+	colorPicker: {
+		title: 'Click to add color point',
+		tolerance: {
+			txt: 'Adjust tolerance:'
+		},
+		color: {
+		txt: 'Color:'
+		},
+		toggleView: {
+		'title': 'Show original image',
+		txt: 'Show original image:'
+		},
+		desatOuter: {
+			'title': 'Discolour other colors',
+                   txt: 'Discolor other colors:'
+		}
+	}
+}

@@ -1,0 +1,83 @@
+drag and zoom need to be single tool, 	**Done
+every tool should have activator and deactivator **done
+During dragiung there shouldnot be any zoom change **done
+Check the performance during drag / zoom
+Init should create the toolbar icons **done
+Store the canvas offset initially.
+
+Improve the drag **done
+Zoom out issue after drag ** important
+set the cursor for the sat desat **done
+improve the saturate and desaturate drag (this should be continupus)
+set the restore point length as per the browser or device
+after deactiviting the desat tool the slider is not getting removed; **Solved
+check saturate and desaturate text in all place
+Reset the tools on image changes
+Remove the mouseout remove drag for the sat and de sat tools
+Touchs frendly UI
+Check whether after reset (changing the image) the tools are getyting reset (visually also) Or set the values during activation
+Keep image datas for all teh canvas ready
+manage redo undo properly for all tools and their combinations
+for faster calculation in 3d distance, don't sqrt
+add delete functionality in cp button
+add deactivate functionality for cp
+brush mouse out should be proper(mouse up on body will remove the functionality) **done
+Improve the wand tool. Use contiguous logic for to whole area and at the end remove small clusters.
+highlight the activated tool ** done
+create a spacing css
+Make all btn tiles configurable from one object. 
+Seperate class for btn image
+Visual canvas input output should be filterd by the watermark. There will be direct access. So there will no need of individual helper.drawWaterMark
+Replace frequently used strings with globally defined variables
+add subtool group
+
+
+
+
+Task list-
+[9/8/15, 1:12:36 AM] Greg Moreno: 1) Magic wand tool **done
+2) Stay on image / image switch (view origional / view new) **done (requirement changed little bit)
+3) Brush size (cursor effect) **done
+4) Select overlay image
+5) Crop (user crops image for predefined size. User can zoom and select specific area)
+Similar to http://en.sominus.ru/plugins/imagecropper/example.html
+https://0.s3.envato.com/files/134096835/index.html#/demo
+6) Enlarge for smaller photos
+7) Tool Tip (Names and status)
+[9/8/15, 1:12:41 AM] Greg Moreno: let me explain each of these
+
+
+** Use "sports-fan-face-paint4.jpg" and "ca40324dd47556e3426d349893c3c15f.jpg" to select your default vaue of color picker range
+** More that one color picker with toggle view option ** done
+Upload overlay option
+Use rezize and crop
+** and wand enabled css cursor
+
+-- make default color value at the curret max.
+-- increase the max little more
+
+
+
+
+***
+
+Crop tool
+Upload for the overlay
+Test in Ios and android
+Finish UI
+
+** change the html also
+
+Walk through needs to be implemented.
+Crop needs improvement
+take image and upload from browser
+
+
+
+
+
+*** new issues
+zoom out after zoom in  is having one extra overlapping
+sometime after croping and clicking the first tool the image is getting reset
+add the overlay position options
+Add HSL comperasion

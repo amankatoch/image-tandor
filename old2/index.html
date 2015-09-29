@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <div class="palette-block">
+        <div class="palette">
+            <span id="saturate" class="add_table__data_botton_class sat_tool" title="Click to add saturation brush">&nbsp;</span>
+            <span id="desaturate" class="add_table__data_botton_class desat_tool" title="Click to add desaturation brush">&nbsp;</span>
+            <span id="cpAdd" class="add_table__data_botton_class" title="Click to add color point">+</span>
+            <span id="cpBtnHolder"></span>
+            <span id="msg">-:Please click on image to select the color:-</span>
+        </div>
+        <div class="upload-image">
+            <label>Image File:</label>
+            <input type="file" id="imageLoader" name="imageLoader" />
+        </div>
+    </div>
+    <div class="canvas-holder">
+        <canvas id="imageCanvas"></canvas>
+    </div>
+    <script type="text/javascript">
+    var jQimageLoader = $('#imageLoader'),
+        jQCanvas = $("#imageCanvas"),
+        //canvas = document.getElementById('imageCanvas'),
+        jQAddCP = $('#cpAdd').hide(),
+        jQSaturate = $('#saturate').hide(),
+        jQDSaturate = $('#desaturate').hide(),
+        jQCpBtnHolder = $("#cpBtnHolder"),
+        jQMsg = $("#msg").hide(),
+        lastCP,
+        //ctx = canvas.getContext('2d'),
+        canvasW, canvasH,
+        cpCount = 0,
+        rgbsStr = "rgba(",
+        commaStr = ",",
+        closeBrac = ")",
+        cpStoreArr = [],
+        firstImageLoaded = false,
+        pixelFiltrationInfo,
+        defaultFuzzyNess = 0.7,
+        cpElemId = "cp_point_id_",
+        waterMarkURL = "images/watermark.png",
+        saturation_scale = 4,
+        doDesaturation = true,
+        colorCanvas = {},
+        grayCanvas = {},
+        wmCanvas = {},
+        visualCanv = {},
+
+        mouseMoveStr= 'mousemove',
+
+
+        helper = {},
+
+        // frequently used methods
+        mathPow = Math.pow,
+        mathSqrt = Math.sqrt,
+        mathRound = Math.round;
+
+
+    /* create the canvas elements */
+
+    //visual canvas
+    visualCanv.canvasElem = document.getElementById('imageCanvas');
+    visualCanv.jQElem = $(visualCanv.canvasElem);
+    visualCanv.ctx = visualCanv.canvasElem.getContext('2d');
+
+    //color
+    colorCanvas.canvasElem = document.createElement("canvas");
+    colorCanvas.jQElem = $(colorCanvas.canvasElem);
+    colorCanvas.ctx = colorCanvas.canvasElem.getContext('2d');
+
+    //gray
+    grayCanvas.canvasElem = document.createElement("canvas");
+    grayCanvas.jQElem = $(grayCanvas.canvasElem);
+    grayCanvas.ctx = grayCanvas.canvasElem.getContext('2d');
+
+    //watermark
+    wmCanvas.canvasElem = document.createElement("canvas");
+    wmCanvas.jQElem = $(wmCanvas.canvasElem);
+    wmCanvas.ctx = wmCanvas.canvasElem.getContext('2d');
+
+
+
+    helper.drawColorImg = function() {
+        visualCanv.ctx.drawImage(colorCanvas.canvasElem, 0, 0);
+    };
+    helper.drawGrayImg = function() {
+        visualCanv.ctx.drawImage(grayCanvas.canvasElem, 0, 0);
+    };
+    helper.drawWaterMark = function() {
+        //visualCanv.ctx.drawImage(wmCanvas.canvasElem, 0, 0);
+    };
+
+    helper.manipulateGrayCanvas = function() { //colorCanvas.imageData grayCanvas.imageData
+        var colorData = colorCanvas.imageData.data,
+            grayData = grayCanvas.imageData.data,
+            i = 0,
+            length = colorData.length;
+
+        for (i = 0; i < length; i += 4) {
+            grayData[i + 1] = grayData[i + 2] = grayData[i] = 0.21 * colorData[i] + 0.72 * colorData[i + 1] + 0.07 * colorData[i + 2];
+            grayData[i + 3] = 255;
+        }
+        grayCanvas.ctx.putImageData(grayCanvas.imageData, 0, 0);
+    };
+
+    helper.loadImage = function(src) {
+        if (src) {
+            var img = new Image();
+            img.onload = function() {
+
+                // set the canvas size
+                canvasW = colorCanvas.canvasElem.width = visualCanv.canvasElem.width = grayCanvas.canvasElem.width = img.width;
+                canvasH = colorCanvas.canvasElem.height = visualCanv.canvasElem.height = grayCanvas.canvasElem.height = img.height;
+
+                // draw the color image
+                colorCanvas.ctx.drawImage(img, 0, 0);
+
+                // get the color data
+                colorCanvas.imageData = colorCanvas.ctx.getImageData(0, 0, canvasW, canvasH);
+                // get the vizCanv data (now blank)
+                visualCanv.imageData = visualCanv.ctx.createImageData(canvasW, canvasH);
+                // get the gray data (now blank)
+                grayCanvas.imageData = grayCanvas.ctx.createImageData(canvasW, canvasH);
+
+                // generate corrosponding gray canvas
+                helper.manipulateGrayCanvas();
+                //lode initially the color image
+                helper.drawColorImg();
+
+                // for the first load make the tools visible.
+                if (!firstImageLoaded) {
+                    jQAddCP.show();
+                    jQSaturate.show();
+                    jQDSaturate.show();
+                }
+                firstImageLoaded = true;
+                pixelFiltrationInfo = [];
+                var i = cpStoreArr.length - 1;
+                for (; i >= 0; i -= 1) {
+                    cpStoreArr[i].jQElem.remove();
+                }
+
+                // reset previous filters
+                cpStoreArr = [];
+                pixelFiltrationInfo.length = canvasW * canvasH;
+            }
+            img.src = src;
+        }
+    }
+
+    helper.loadWaterMark = function(url) {
+        if (url) {
+            var img = new Image();
+            img.onload = function() {
+                var width, height, i, l, index = 0,
+                    imgData, minValForWhite = 200,
+                    waterCTX, waterMarkImageData;
+
+                width = wmCanvas.canvasElem.width = img.width;
+                height = wmCanvas.canvasElem.height = img.height;
+                // draw the image
+                wmCanvas.ctx.drawImage(img, 0, 0);
+
+                wmCanvas.imageData = wmCanvas.ctx.getImageData(0, 0, width, height);
+
+                // make the white part transparent
+                l = width * height;
+                imgData = wmCanvas.imageData.data;
+                for (index = 0; i < l; index += 4) {
+                    if (imgData[index] > minValForWhite && imgData[index + 1] > minValForWhite && imgData[index + 2] > minValForWhite) {
+                        imgData[index] = imgData[index + 1] = imgData[index + 2] = imgData[index + 3] = 0.1;
+                    }
+
+                }
+                wmCanvas.ctx.putImageData(wmCanvas.imageData, 0, 0)
+
+            }
+            img.src = url;
+        }
+    };
+
+
+   helper.addDgarMoveEvent = function(elem, onDragFn, dragStartFn, dragEndFn, removeOnMouseOut, endOnDoc, moveOnDoc) {
+       var dragStartX, dragStartY,
+
+           removeAll = function() {
+               elem.off('mousedown', startDrag)
+                   .off(mouseMoveStr, onDrag)
+                   .off('mouseup', endDrag)
+                   .off('mouseout', endDrag);
+               if (endOnDoc) {
+                   $(document).on('mouseup', endDrag);
+               }
+           },
+           endDrag = function(event) {
+               dragEndFn && dragEndFn(event);
+               if (moveOnDoc) {
+                   $(document).off(mouseMoveStr, onDrag);
+               } else {
+                   elem.off(mouseMoveStr, onDrag);
+               }
+           },
+           startDrag = function(event) {
+               dragStartFn && dragStartFn(event);
+               dragStartX = event.pageX;
+               dragStartY = event.pageY;
+
+               if (removeOnMouseOut) {
+                   elem.on('mouseout', endDrag);
+               }
+               if (endOnDoc) {
+                   $(document).on('mouseup', endDrag);
+               }
+               if (moveOnDoc) {
+                   $(document).on(mouseMoveStr, onDrag);
+               } else {
+                   elem.on(mouseMoveStr, onDrag);
+               }
+           },
+           onDrag = function(e) {
+               e.dragX = e.pageX - dragStartX;
+               e.dragY = e.pageY - dragStartY;
+               onDragFn(e);
+           };
+
+       elem.on('mousedown', startDrag)
+           .on('mouseup', endDrag);
+       return removeAll;
+   };
+
+
+    helper.applySat = function(e) {
+        var offset = visualCanv.jQElem.offset(),
+            halfSaturationScale = mathRound(saturation_scale / 2),
+            x = e.pageX - offset.left - halfSaturationScale,
+            y = e.pageY - offset.top - halfSaturationScale,
+            w = saturation_scale,
+            h = saturation_scale;
+        visualCanv.ctx.putImageData((doDesaturation ? grayCanvas : colorCanvas).ctx.getImageData(x, y, w, h), x, y);
+    };
+
+    helper.saturationBrushClicked = function() {
+        var endSatProcess = function() {
+                jQCanvas.off("mousedown", startSatProcess)
+                    .off("mousemove", helper.applySat)
+                    .off("mouseup", endSatProcess);
+            },
+            startSatProcess = function() {
+                jQCanvas.on("mousemove", helper.applySat);
+            };
+
+        helper.addDgarMoveEvent(jQCanvas, helper.applySat, undefined, undefined, undefined, true);
+    };
+
+
+    helper.init = function() {
+
+        // set the local image handler
+        jQimageLoader.on('change', function(e) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                helper.loadImage(event.target.result);
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        });
+
+
+
+        // load and make the watermark ready
+        helper.loadWaterMark(waterMarkURL);
+        // add the tools click event handler
+        jQAddCP.on("click", addCPClick);
+        jQSaturate.on('click', function() {
+            doDesaturation = false;
+            helper.saturationBrushClicked();
+        });
+        jQDSaturate.on('click', function() {
+            doDesaturation = true;
+            helper.saturationBrushClicked();
+        });
+    };
+
+
+    // Initialize
+    helper.init();
+
+
+
+
+
+
+    function rgb2gray(R, G, B) {
+        return 0.21 * R + 0.72 * G + 0.07 * B;
+    }
+
+    function getRgba(colorData) {
+        return rgbsStr + colorData[0] + commaStr + colorData[1] + commaStr + colorData[2] + commaStr + (Math.round((colorData[3] / 255) * 100) / 100) + closeBrac;
+    }
+
+
+    function drawFilteredImage() {
+        var l = pixelFiltrationInfo.length,
+            filteredImageData = visualCanv.imageData.data,
+            imageData = colorCanvas.imageData.data,
+            rIndex = 0,
+            i, grayVal;
+        for (i = 0; i < l; i += 1, rIndex += 4) {
+            // set full alpha
+            filteredImageData[rIndex + 3] = 255;
+            // keep color
+            if (pixelFiltrationInfo[i]) {
+                filteredImageData[rIndex] = imageData[rIndex];
+                filteredImageData[rIndex + 1] = imageData[rIndex + 1];
+                filteredImageData[rIndex + 2] = imageData[rIndex + 2];
+            } else { // desaturate color
+                grayVal = rgb2gray(imageData[rIndex], imageData[rIndex + 1], imageData[rIndex + 2]);
+                filteredImageData[rIndex] = filteredImageData[rIndex + 1] = filteredImageData[rIndex + 2] = grayVal;
+            }
+        }
+        // draw the filtered image
+        visualCanv.ctx.putImageData(visualCanv.imageData, 0, 0);
+        // draw the watermark
+        helper.drawWaterMark();
+    }
+
+    function addCPPoint() {
+        // create the color point
+        var jQCPSpan = $(document.createElement("span")),
+            buttonElem = $(document.createElement("span")).html("&ndash;").addClass("del_cp_botton_class"),
+            jQSlider = $(document.createElement("div")).addClass("color-slider"),
+            jQSliderDiv = $(document.createElement("div")).addClass("color-slider-holder").append(jQSlider),
+            index = cpCount,
+            localCp,
+            timer,
+            lastTime;
+
+
+        jQCPSpan.attr("id", cpElemId + (++cpCount)).html("&nbsp;&nbsp;").addClass("add_cp_botton_class");
+        index = cpCount;
+        lastCP = localCp = {
+            jQElem: jQCPSpan,
+            index: cpCount, // index starts from 1
+            fuzzyNess: defaultFuzzyNess
+        };
+        cpStoreArr.push(lastCP)
+
+        // add delete button
+        buttonElem.on("click", function() {
+            // delete the clor point elem
+            jQCPSpan.remove();
+
+            // remove the filter effect
+            setTimeout(function() {
+                deleteCP(index);
+            }, 0);
+        });
+
+
+
+        jQSlider.slider({
+            min: 0,
+            max: 1,
+            step: 0.1,
+            value: defaultFuzzyNess,
+            change: function(event, ui) {
+                timer && clearTimeout(timer);
+                timer = setTimeout(function() {
+                    var value = ui.value,
+                        time = new Date().getTime();
+                    lastTime = time;
+                    if (value >= 0 && value <= 1) {
+                        localCp.fuzzyNess = value;
+                        applyFuzzyNess(localCp);
+                        addCPFilters(localCp);
+                        drawFilteredImage();
+                    }
+                }, 100);
+            }
+        });
+        buttonElem.hide();
+        jQSliderDiv.hide();
+
+        jQCPSpan.on("mouseover", function() {
+            jQSliderDiv.show();
+            buttonElem.show();
+        }).on("mouseout", function() {
+            jQSliderDiv.hide();
+            buttonElem.hide();
+        }).append(buttonElem).append(jQSliderDiv);
+
+        jQCpBtnHolder.prepend(jQCPSpan);
+    }
+
+    function addCPFilters(cp) {
+        var l = pixelFiltrationInfo.length,
+            i,
+            dataIndex = 0,
+            r,
+            g,
+            b,
+            colorData = colorCanvas.imageData.data,
+            cpIndex = cp.index,
+            fuzzyDis = cp.fuzzyDis,
+            cpR = cp.colorData[0],
+            cpG = cp.colorData[1],
+            cpB = cp.colorData[2];
+        // minR = cp.minColorData[0],
+        // minG = cp.minColorData[1],
+        // minB = cp.minColorData[2],
+        // maxR = cp.maxColorData[0],
+        // maxG = cp.maxColorData[1],
+        // maxB = cp.maxColorData[2];
+
+        for (i = 0; i < l; i += 1, dataIndex += 4) {
+            if ((!pixelFiltrationInfo[i]) || pixelFiltrationInfo[i] === cpIndex) {
+                r = colorData[dataIndex];
+                g = colorData[dataIndex + 1];
+                b = colorData[dataIndex + 2];
+
+                if (mathSqrt(mathPow(cpR - r, 2) + mathPow(cpG - g, 2) + mathPow(cpB - b, 2)) < fuzzyDis) {
+                    pixelFiltrationInfo[i] = cpIndex;
+                } else {
+                    pixelFiltrationInfo[i] = undefined;
+                }
+
+                // if (r <= maxR && g <= maxG && b <= maxB && r >= minR && g >= minG && b >= minB) {
+                //     pixelFiltrationInfo[i] = cpIndex;
+                // } else {
+                //     pixelFiltrationInfo[i] = undefined;
+                // }
+            }
+        }
+    }
+
+    function deleteCP(cpIndex) {
+        var i = cpStoreArr.length - 1,
+            cp;
+        // remove the filter
+        removeCPFilter(cpIndex);
+
+        //reapply the remaning filters
+        for (; i >= 0; i -= 1) {
+            cp = cpStoreArr[i];
+            if (cp.index == cpIndex) {
+                cpStoreArr.splice(i, 1);
+            } else {
+                addCPFilters(cp);
+            }
+        }
+        // draw the image
+        if (cpStoreArr.length) {
+            drawFilteredImage();
+        } else {
+            // restore the color
+            visualCanv.ctx.putImageData(colorCanvas.imageData, 0, 0);
+        }
+    }
+
+    function removeCPFilter(cpIndex) {
+        if (cpIndex) {
+            var l = pixelFiltrationInfo.length,
+                i;
+            for (i = 0; i < l; i += 1) {
+                if (pixelFiltrationInfo[i] === cpIndex) {
+                    delete pixelFiltrationInfo[i];
+                }
+            }
+        }
+    }
+
+    function applyFuzzyNess(cp) {
+        var colorData = cp.colorData,
+            fuzzyNess = cp.fuzzyNess,
+            minColorData = [],
+            maxColorData = [];
+        cp.fuzzyDis = 120 * fuzzyNess;
+        // minColorData[0] = colorData[0] - Math.round(colorData[0] * fuzzyNess);
+        // minColorData[1] = colorData[1] - Math.round(colorData[1] * fuzzyNess);
+        // minColorData[2] = colorData[2] - Math.round(colorData[2] * fuzzyNess);
+
+        // maxColorData[0] = colorData[0] + Math.round((255 - colorData[0]) * fuzzyNess);
+        // maxColorData[1] = colorData[1] + Math.round((255 - colorData[1]) * fuzzyNess);
+        // maxColorData[2] = colorData[2] + Math.round((255 - colorData[2]) * fuzzyNess);
+
+        // cp.minColorData = minColorData;
+        // cp.maxColorData = maxColorData;
+    }
+
+    function addCPClick() {
+        if (!firstImageLoaded) {
+            return;
+        }
+        var mouseOverListner = function(e) {
+                var colorData = pickColor(e);
+                lastCP.jQElem.css("background-color", getRgba(colorData));
+            },
+            clickListner = function(e) {
+                var colorData = pickColor(e);
+                lastCP.jQElem.css("background-color", getRgba(colorData));
+                lastCP.colorData = colorData;
+                applyFuzzyNess(lastCP);
+                // Hide the emessage
+                jQMsg.hide();
+
+                // remove the color pick fn for mouseOver
+                jQCanvas.off("mousemove", mouseOverListner);
+                // remove the click listner
+                jQCanvas.off("click", clickListner);
+
+                // remove the courser
+                jQCanvas.removeClass("color_picker");
+
+                // apply the filters
+                addCPFilters(lastCP);
+                // draw the image
+                drawFilteredImage();
+            };
+
+        // Show the emessage
+        jQMsg.show();
+
+        // restore the color
+        visualCanv.ctx.putImageData(colorCanvas.imageData, 0, 0);
+        // set the courser
+        jQCanvas.addClass("color_picker");
+        // bind the color pick fn for mouseOver
+        jQCanvas.on("mousemove", mouseOverListner);
+        // bind the color pick fn
+        jQCanvas.on("click", clickListner);
+        // add color point
+        addCPPoint();
+    }
+
+    function pickColor(e) {
+        var offset = jQCanvas.offset(),
+            imageData;
+        imageData = visualCanv.ctx.getImageData(e.pageX - offset.left, e.pageY - offset.top, 1, 1);
+        return imageData.data;
+    }
+    </script>
+</body>
+
+</html>

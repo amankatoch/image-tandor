@@ -1,0 +1,289 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: arial, san-serif;
+    font-size: 14px;
+    color: #4c4c4c;
+    background-color: #EFEFEF;
+}
+
+.palette-block {
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.palette {
+    background-color: #EFEFEF;
+    margin-bottom: 10px;
+}
+
+.tool-slider {
+    width: 100px;
+    max-width: 100px;
+    display: inline-block;
+    height: 5px !important;
+    margin: 5px 5px 5px 5px;
+}
+
+.drag-canvas {
+    width: 30px;
+    max-width: 30px;
+    display: inline-block;
+    background-color: #fcfcfc;
+    height: 30px;
+    padding: 2px 2px 2px 2px;
+    background-size: 34px 34px;
+    margin: 5px 5px 5px 5px;
+    cursor: pointer;
+    background-image: url("../images/icons/cursor_drag_arrow.png");
+}
+
+.canvas-holder {
+    background-color: #fcfcfc;
+    position: relative;
+    padding: 0px;
+}
+
+.wand_enabled {
+    cursor: crosshair;
+}
+
+.color-picker {
+    cursor: crosshair;
+}
+.drag_enabled {
+    cursor:move
+}
+
+.add_cp_botton_class {
+    padding: 8px 12px;
+    border: 1px solid #b3b3b3;
+    border-radius: 3px;
+    color: #000;
+    cursor: pointer;
+}
+
+
+.del_cp_botton_class {
+    background-color: #c0bfbf;
+    border: 1px solid #fff;
+    color: #000;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 10px;
+    padding: 4px 6px;
+    border-radius: 50%;
+}
+
+.del_cp_botton_class:hover {
+    background-color: #b02201;
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.color-slider-holder {
+    width: 100px;
+    padding: 8px;
+    background-color: #fff;
+    position: absolute;
+    z-index: 101;
+    left: -10px;
+    top: 40px;
+}
+
+.color-slider-holder:before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-bottom: 8px solid #fff;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+    position: absolute;
+    z-index: 102;
+    top: -7px;
+    left: 20px;
+    margin-left: -4px;
+}
+
+.color-brush-20 {
+	cursor: url("../images/icons/brush_color_20.png"), cell;
+}
+.color-brush-16 {
+	cursor: url("../images/icons/brush_color_16.png"), cell;
+}
+.color-brush-12 {
+	cursor: url("../images/icons/brush_color_12.png"), cell;
+}
+.color-brush-8 {
+	cursor: url("../images/icons/brush_color_8.png"), cell;
+}
+.color-brush-4 {
+	cursor: url("../images/icons/brush_color_4.png"), cell;
+}
+.gray-brush-20 {
+	cursor: url("../images/icons/brush_gray_20.png"), cell;
+}
+.gray-brush-16 {
+	cursor: url("../images/icons/brush_gray_16.png"), cell;
+}
+.gray-brush-12 {
+	cursor: url("../images/icons/brush_gray_12.png"), cell;
+}
+.gray-brush-8 {
+	cursor: url("../images/icons/brush_gray_8.png"), cell;
+}
+.gray-brush-4 {
+	cursor: url("../images/icons/brush_gray_4.png"), cell;
+}
+
+.upload-image {
+    background-color: #EEEEEE;
+    padding: 10px 0;
+}
+
+.left {
+    background-color: #EEEEEE;
+    float: left;
+    width: 50px;
+}
+
+.right {
+    margin: 0 10px 0 50px;
+    padding: 10px;
+}
+
+
+
+
+.btn_magic_wand {
+   background-position: 2px -1px;
+}
+
+.btn_undo{
+   background-position: -37px -4px;
+}
+
+.btn_redo{
+   background-position: -73px -4px;
+}
+
+.btn_zoom_drag{
+   background-position: -108px -4px;
+}
+
+
+.sub_btn_desat{
+	
+}
+
+.sub_btn_sat, .sub_btn_desat{
+	padding: 2px 9px;
+    background: #ccc;
+    background: #ccc url(../images/icons/icons.png) no-repeat 0 0;
+}
+
+.sub_btn_sat {
+    background-position: -108px -4px;
+}
+.sub_btn_desat{
+    background-position: -108px -4px;
+}
+
+.btn_desat{
+   background-position: -179px -3px;
+}
+
+.btn_sat{
+   background-position: -144px -3px;
+}
+
+.btn_color_picker{
+   background-position: -212px -4px;
+}
+
+.btn_overlay {
+    background-position: -212px -40px;
+}
+
+
+
+
+/*customized the slider*/
+
+.tool-slider {
+    margin: -1px 6px;
+}
+
+.ui-slider .ui-slider-handle {
+    height: 12px !important;
+}
+
+
+.sub_btn_sat {
+    padding: 2px 9px;
+    background-position: -247px -9px;
+    cursor: pointer;
+}
+
+.go_btn {
+    padding: 2px 9px;
+    cursor: pointer;
+    background-color: #029902;
+}
+
+.sub_btn_desat {
+    padding: 2px 9px;
+    background-position: -283px  -9px;
+    cursor: pointer;
+}
+
+/*.ar_group {
+
+}
+
+.ar_btn {
+    margin: 2px;
+    padding: 2px 9px;
+    cursor: pointer;
+    background-color: #a4a4a4;
+}
+
+.ar_selected {
+    border: 1px solid #029902;
+}
+
+.overlay_btn {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background-color: #FFFFFF;
+    border: 1px solid #a4a4a4;
+}
+
+/***  don't add any other style as this is going to be added in the canvas element also ***/
+.overlay_ne {
+    cursor: nesw-resize;
+}
+.overlay_n {
+    cursor: ns-resize;
+}
+.overlay_nw {
+    cursor: nwse-resize;
+}
+.overlay_w {
+    cursor: ew-resize;
+}
+.overlay_sw {
+    cursor: nesw-resize;
+}
+.overlay_s {
+    cursor: ns-resize;
+}
+.overlay_se {
+    cursor: nwse-resize;
+}
+.overlay_e {
+    cursor: ew-resize;
+}
+
